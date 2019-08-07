@@ -108,6 +108,44 @@ class StringCalculatorTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    public void add_stringsSeparatedBy_customDelimiterBonus(){
+        int result1 = 0;
+        int result2 = 0;
+        int result3 = 0;
+        String testNumbers1 = "//***\n1***2***3";
+        String testNumbers2 = "//$,@\n1$2@3";
+        String testNumbers3 = "//$$$,@@@,***\n1@@@2***3$$$4";
+        int expected1 = 6;
+        int expected2 = 6;
+        int expected3 = 10;
+        String delimiter1 =  getDelimiter(testNumbers1);
+        String delimiter2 =  getDelimiter(testNumbers2);
+        String delimiter3 =  getDelimiter(testNumbers3);
+
+        result1 =  Arrays.asList(testNumbers1.split("([" + delimiter1 + "])"))
+                .stream()
+                .filter(number -> number.matches("\\d+"))
+                .map(Integer::parseInt)
+                .filter(number -> number < 1000)
+                .mapToInt(Integer::intValue).sum();
+        result2 =  Arrays.asList(testNumbers2.split("([" + delimiter2 + "])"))
+                .stream()
+                .filter(number -> number.matches("\\d+"))
+                .map(Integer::parseInt)
+                .filter(number -> number < 1000)
+                .mapToInt(Integer::intValue).sum();
+        result3 =  Arrays.asList(testNumbers3.split("([" + delimiter3 + "])"))
+                .stream()
+                .filter(number -> number.matches("\\d+"))
+                .map(Integer::parseInt)
+                .filter(number -> number < 1000)
+                .mapToInt(Integer::intValue).sum();
+        assertEquals(expected1, result1);
+        assertEquals(expected2, result2);
+        assertEquals(expected3, result3);
+    }
+
     private static String getDelimiter(String numbers) {
         return numbers.substring((numbers.indexOf("//") + 2), numbers.indexOf("\n") + 1 );
     }
