@@ -9,19 +9,22 @@ import java.util.stream.Collectors;
 public class StringCalculator {
 
     private static int add(String numbers) throws NegativeNumberException {
-        String delimiter = getDelimiter(numbers);
-        String delimiterSeparatedNumbers = geDelimiterSeparatedNumbers(numbers);
-        List<Integer> numberList = Arrays.asList(delimiterSeparatedNumbers.split("([" + delimiter + "]+)"))
-                .stream()
-                .map(Integer::parseInt).collect(Collectors.toList());
-        List<Integer> negatives = numberList.stream().filter(number -> number < 0).collect(Collectors.toList());
-        if (!negatives.isEmpty()) {
-            throw new NegativeNumberException(String.format("Negatives not allowed, caused by %s", negatives.toString()));
+        if(!numbers.trim().isEmpty()) {
+            String delimiter = getDelimiter(numbers.trim());
+            String delimiterSeparatedNumbers = geDelimiterSeparatedNumbers(numbers.trim());
+            List<Integer> numberList = Arrays.asList(delimiterSeparatedNumbers.split("([" + delimiter + "]+)"))
+                    .stream()
+                    .map(Integer::parseInt).collect(Collectors.toList());
+            List<Integer> negatives = numberList.stream().filter(number -> number < 0).collect(Collectors.toList());
+            if (!negatives.isEmpty()) {
+                throw new NegativeNumberException(String.format("Negatives not allowed, caused by %s", negatives.toString()));
+            }
+            return numberList.stream()
+                    .filter(number -> number <= 1000)
+                    .mapToInt(Integer::intValue)
+                    .sum();
         }
-        return numberList.stream()
-                .filter(number -> number <= 1000)
-                .mapToInt(Integer::intValue)
-                .sum();
+        return 0;
     }
 
     private static String getDelimiter(String numbers) {
